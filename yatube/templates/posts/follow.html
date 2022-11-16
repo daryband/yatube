@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Following{% endblock %}
+{% block content %}
+    {% include 'posts/includes/switcher.html' %}
+    <h1>Last posts by your favorite authors</h1>
+    {% load cache %}
+    {% cache 20 follow_page page_obj.number %}
+        {% for post in page_obj %}
+            {% include 'posts/includes/post.html' %}
+            {% if post.group %}
+                <a href="{% url 'posts:group_list' post.group.slug %}">all group posts</a>
+            {% endif %}
+            {% if not forloop.last %}
+                <hr>
+            {% endif %}
+        {% endfor %}
+        {% include 'posts/includes/paginator.html' %}
+    {% endcache %}
+{% endblock %}

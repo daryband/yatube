@@ -1,0 +1,21 @@
+from django import forms
+from .models import Post, Comment
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('text', 'group', 'image')
+
+
+class CommentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for _, value in self.fields.items():
+            value.widget.attrs['placeholder'] = value.help_text
+
+    class Meta:
+        model = Comment
+        fields = ('text',)
+        widgets = {'text': forms.Textarea(
+            attrs={'rows': 3})}
